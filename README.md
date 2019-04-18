@@ -1,5 +1,9 @@
 # Zuoravel
 
+[![Laravel](https://img.shields.io/badge/Laravel-5.5^-orange.svg)](http://laravel.com)
+[![Packagist](https://img.shields.io/packagist/dm/rob-lester-jr04/zuoravel.svg)](https://packagist.org/packages/rob-lester-jr04/zuoravel)
+[![Packagist](https://img.shields.io/packagist/l/rob-lester-jr04/zuoravel.svg)](https://packagist.org/packages/rob-lester-jr04/zuoravel)
+
 Easily connect with APIs and integrate Zuora with your Laravel application
 
 ## Installation
