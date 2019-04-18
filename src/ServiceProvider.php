@@ -28,6 +28,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([
 			self::CONFIG_PATH => config_path('zuoravel.php'),
 		], 'config');
+
+        \Blade::directive('zpayment', function($expression) {
+            return "<?php echo Zuora::iframe('$expression'); ?>";
+        });
     }
 
 }

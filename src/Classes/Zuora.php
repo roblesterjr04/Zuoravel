@@ -6,6 +6,7 @@ class Zuora
 {
 
     private $client;
+    private $hostedPage;
 
     /**
      * Instantiate the library class.
@@ -13,6 +14,7 @@ class Zuora
     public function __construct()
     {
         $this->client = new ZuoraClient();
+        $this->hostedPage = new ZuoraHostedPage();
     }
 
     public function test()
@@ -32,5 +34,10 @@ class Zuora
     public function describe($object)
     {
         return $this->client->get('describe/'.$object);
+    }
+
+    public function iframe($id)
+    {
+        return $this->hostedPage->iframe($id);
     }
 }
