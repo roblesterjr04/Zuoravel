@@ -3,6 +3,7 @@
 namespace Lester\Zuoravel\Classes;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Lester\Zuoravel\Interfaces\Authenticatable;
 
 class ClientAuth implements Authenticatable

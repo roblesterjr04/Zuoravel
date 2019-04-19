@@ -11,22 +11,22 @@ return [
     'access_key' => env('ZUORA_ACCESS_KEY'), // apiAccessKeyId for UserAuth method
     'secret_access_key' => env('ZUORA_SECRET_ACCESS_KEY'), // apiSecretAccessKey for UserAuth method
 
-    // Values are UserAuth or ClientAuth
-    'authentication' => 'UserAuth',
+    // Values are UserAuth or ClientAuth (recommended)
+    'authentication' => 'ClientAuth',
 
-    // Values are 'cache' or 'session'
+    // Values are 'session' or 'cache' (recommended)
     'storage' => 'cache',
 
     'entities' => [
-        '2c92c0f966a9b7430166ad5141b404e1'
+        //
     ],
 
     'hostedPage' => [
         'apiSecurityKey' => env('ZUORA_API_SECURITY_KEY'),
 
-        'tenantId' => '28102',
+        'tenantId' => '',
 
-        'pageId' => '2c92c0f86a2f3322016a312559150781',
+        'pageId' => '',
 
         'height' => 400,
 
@@ -36,7 +36,7 @@ return [
 
         'scriptVersion' => '1.3.1',
 
-        'paymentGateway' => 'Cybersource Test Gateway'
+        'paymentGateway' => ''
     ]
 
 ];

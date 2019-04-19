@@ -22,12 +22,14 @@ class Zuora
 
     public function __call($method, $arguments)
     {
-        if (count($arguments) == 1) {
-            return $this->client->post($method, $arguments);
-        } else if (count($arguments) == 2) {
-            return $this->client->put($method, $arguments);
+        $restModel = $this->getRestModel($method);
+        if ($restModel !== null) {
+            if ($restModel->collectionOf) {
+                return $restModel->all();
+            }
+            return $restModel->get(...$arguments);
         } else {
-            return $this->client->get($method);
+            // Pass generic calls to client.
         }
     }
 
@@ -36,13 +38,13 @@ class Zuora
         return $this->client;
     }
 
-    public function catalog($productId = null)
+    /*public function catalog($productId = null)
     {
         if ($productId)
             return $this->client->get('catalog/product/' . $productId);
 
         return $this->client->get('catalog/products');
-    }
+    }*/
 
     public function describe($object)
     {
@@ -61,6 +63,13 @@ class Zuora
                 break;
         }
 
+    }
+
+    private function getRestModel($model, $options = [])
+    {
+        $model = 'Lester\\Zuoravel\\Models\\' . ucwords($model);
+        if (!class_exists($model)) return null;
+        return new $model($options);
     }
 
     public function iframeUrl($id = null, $tenantId = null)
