@@ -13,11 +13,14 @@ class ZuoraClient
 {
     private $client;
     private $cookies = [];
+    private $authMethod;
 
     public function __construct()
     {
         $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.api.zuora.com';
         $version = config('zuoravel.version');
+        $authMethod = 'Lester\\Zuoravel\\Classes\\' . config('zuoravel.authentication');
+        $this->authMethod = new $authMethod();
 
         $this->client = new Client([
             'base_uri' => "$url/$version/",
@@ -33,25 +36,28 @@ class ZuoraClient
 
     public function authenticate()
     {
-        $response = $this->client->post('connections', [
-            'headers' => [
-                'apiAccessKeyId' => config('zuoravel.client_id'),
-                'apiSecretAccessKey' => config('zuoravel.client_secret')
-            ]
-        ]);
+        return $this->authMethod->authenticate($this->client);
     }
 
-    public function __call($method, $arguments)
+    public function __call($method, $arguments = [])
     {
         return $this->request($method, ...$arguments);
     }
 
-    private function request($method, $endpoint, $arguments)
+    private function request($method, $endpoint, $arguments = [])
     {
         try {
-            $response = $this->client->$method($endpoint, [
+            $payload = [
                 'json' => $arguments
-            ]);
+            ];
+            $storage = $this->tokenStorage();
+            if (config('zuoravel.authentication') == 'ClientAuth') {
+                $payload['headers'] = [
+                    'Authorization' => 'Bearer ' . $storage::get('_zuoravel_token', $this->authenticate())->access_token,
+                    'Zuora-Entity-Ids' => config('zuoravel.entities'),
+                ];
+            }
+            $response = $this->client->$method($endpoint, $payload);
         } catch (ClientException $e) {
             $this->authenticate();
             return $this->request($method, $endpoint, $arguments);

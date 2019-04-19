@@ -6,7 +6,6 @@ class Zuora
 {
 
     private $client;
-    private $hostedPage;
 
     /**
      * Instantiate the library class.
@@ -14,7 +13,6 @@ class Zuora
     public function __construct()
     {
         $this->client = new ZuoraClient();
-        $this->hostedPage = new ZuoraHostedPage();
     }
 
     public function test()
@@ -26,9 +24,24 @@ class Zuora
     {
         if (count($arguments) == 1) {
             return $this->client->post($method, $arguments);
+        } else if (count($arguments) == 2) {
+            return $this->client->put($method, $arguments);
         } else {
             return $this->client->get($method);
         }
+    }
+
+    public function getZuoraClient()
+    {
+        return $this->client;
+    }
+
+    public function catalog($productId = null)
+    {
+        if ($productId)
+            return $this->client->get('catalog/product/' . $productId);
+
+        return $this->client->get('catalog/products');
     }
 
     public function describe($object)
@@ -36,8 +49,23 @@ class Zuora
         return $this->client->get('describe/'.$object);
     }
 
-    public function iframe($id)
+    public function paymentScreen($id = null, $tenantId = null)
     {
-        return $this->hostedPage->iframe($id);
+        $signingVersion = config('zuoravel.hostedPage.signatureMethod');
+        switch ($signingVersion) {
+            case 'v1':
+                return (new PagesIframe($id, $tenantId))->screen();
+                break;
+            case 'v2':
+                return (new PagesScript($id, $tenantId))->screen();
+                break;
+        }
+
     }
+
+    public function iframeUrl($id = null, $tenantId = null)
+    {
+        return (new ZuoraHostedPage($id, $tenantId))->url();
+    }
+
 }
