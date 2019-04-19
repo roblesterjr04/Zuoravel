@@ -53,4 +53,15 @@ abstract class RestModel extends Model
         return $options;
     }
 
+    public function describe()
+    {
+        $className = strtolower(class_basename($this));
+        return $this->client->get('describe/' . $className);
+    }
+
+    /*public static function __callStatic($method, $arguments)
+    {
+        return (new static)->$method(...$arguments);
+    }*/
+
 }

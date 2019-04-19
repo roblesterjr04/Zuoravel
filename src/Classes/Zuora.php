@@ -30,6 +30,7 @@ class Zuora
             return $restModel->get(...$arguments);
         } else {
             // Pass generic calls to client.
+            $this->client->$method(...$arguments);
         }
     }
 
