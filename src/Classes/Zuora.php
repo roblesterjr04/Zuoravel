@@ -52,7 +52,7 @@ class Zuora
         return $this->client->get('describe/'.$object);
     }
 
-    public function paymentScreen($id = null, $tenantId = null)
+    public function paymentScreen($id = null, $tenantId = null, $submit = true)
     {
         $signingVersion = config('zuoravel.hostedPage.signatureMethod');
         switch ($signingVersion) {
@@ -60,7 +60,7 @@ class Zuora
                 return (new PagesIframe($id, $tenantId))->screen();
                 break;
             case 'v2':
-                return (new PagesScript($id, $tenantId))->screen();
+                return (new PagesScript($id, $tenantId, $submit))->screen();
                 break;
         }
 

@@ -10,12 +10,13 @@ abstract class ZuoraHostedPage
     private $pageId;
     private $tenantId;
     private $pageModel;
+    protected $submit;
 
-    public function __construct($pageId = null, $tenantId = null)
+    public function __construct($pageId = null, $tenantId = null, $submit = true)
     {
         $this->pageId = $pageId;
         $this->tenantId = $tenantId;
-
+        $this->submit = $submit;
     }
 
 
