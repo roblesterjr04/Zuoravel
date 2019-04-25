@@ -63,8 +63,8 @@ abstract class RestModel extends Model
         }
 
         $collection = collect($options->$collectionOf)->map(function($item) use ($model) {
-            $model = class_basename($model->collectionOf);
-            return new $model((array)$item);
+            $class = $model->collectionOf ?: $model;
+            return new $class((array)$item);
         });
 
         $collection->meta = $queryParams;
