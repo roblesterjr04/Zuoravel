@@ -8,10 +8,18 @@ use Lester\Zuoravel\Facades\Zuora;
 abstract class RestModel extends Model
 {
 
-    private $client;
     protected $object;
+    private $client;
 
     protected $guarded = [];
+
+    public function __sleep()
+    {
+        foreach ($this->hidden as $hidden) {
+            if (isset($this->attributes[$hidden])) unset($this->attributes[$hidden]);
+        }
+        return ['attributes'];
+    }
 
     public function __construct(array $options = [])
     {
@@ -48,17 +56,17 @@ abstract class RestModel extends Model
         $collectionOf = strtolower(str_plural(class_basename($model->collectionOf)));
         $options = Zuora::getZuoraClient()->get($model->getObject(), [], $arguments);
 
-        /*$queryParams = [];
+        $queryParams = [];
         if (property_exists($options, 'nextPage')) {
             $query = parse_url($options->nextPage, PHP_URL_QUERY);
             parse_str($query, $queryParams);
-        }*/
+        }
 
         $collection = collect($options->$collectionOf)->map(function($item) use ($model) {
-            return new $model->collectionOf((array)$item);
+            return new $model((array)$item);
         });
-        $collection->nextPage = $options->nextPage;
-        $collection->arguments = $arguments;
+
+        $collection->meta = $queryParams;
         return $collection;
     }
 

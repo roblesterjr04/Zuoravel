@@ -61,7 +61,8 @@ class ZuoraClient
             $response = $this->client->$method($endpoint, $payload);
         } catch (ClientException $e) {
             //throw($e);
-            $this->authenticate();
+            //sleep(1);
+            //$this->authenticate();
             return $this->request($method, $endpoint, $arguments, $query);
         }
 
