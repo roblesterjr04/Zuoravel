@@ -3,6 +3,7 @@
 namespace Lester\Zuoravel;
 
 use Lester\Zuoravel\Classes\Zuora;
+use Illuminate\Support\Collection;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -32,6 +33,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         \Blade::directive('payment', function($expression) {
             return "<?php echo Zuora::paymentScreen($expression); ?>";
         });
+
+        Collection::macro('next', function() {
+            
+        });
+
     }
 
 }

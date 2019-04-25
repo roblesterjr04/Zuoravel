@@ -44,11 +44,12 @@ class ZuoraClient
         return $this->request($method, ...$arguments);
     }
 
-    private function request($method, $endpoint, $arguments = [])
+    private function request($method, $endpoint, $arguments = [], $query = [])
     {
         try {
             $payload = [
-                'json' => $arguments
+                'json' => $arguments,
+                'query' => $query,
             ];
             $storage = $this->tokenStorage();
             if (config('zuoravel.authentication') == 'ClientAuth') {
@@ -59,8 +60,9 @@ class ZuoraClient
             }
             $response = $this->client->$method($endpoint, $payload);
         } catch (ClientException $e) {
+            //throw($e);
             $this->authenticate();
-            return $this->request($method, $endpoint, $arguments);
+            return $this->request($method, $endpoint, $arguments, $query);
         }
 
         return $this->parseResponse($response);

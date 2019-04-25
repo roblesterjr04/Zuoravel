@@ -25,8 +25,9 @@ class Zuora
         $restModel = $this->getRestModel($method);
         if ($restModel !== null) {
             if ($restModel->collectionOf) {
-                return $restModel->all();
+                return $restModel->all(...$arguments);
             }
+            if (!count($arguments)) return $restModel;
             return $restModel->get(...$arguments);
         } else {
             // Pass generic calls to client.

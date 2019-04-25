@@ -41,6 +41,7 @@ class PagesScript extends ZuoraHostedPage implements Signable
             };
             var zcallback = function(response) {
                 console.log(response);
+                {$this->callback}(response);
             };
             Z.render(
                 zparams,

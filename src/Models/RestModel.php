@@ -42,15 +42,24 @@ abstract class RestModel extends Model
         return $this->object;
     }
 
-    public static function all($columns = [])
+    public static function all($arguments = [])
     {
         $model = new static();
         $collectionOf = strtolower(str_plural(class_basename($model->collectionOf)));
-        $options = Zuora::getZuoraClient()->get($model->getObject());
-        $options = collect($options->$collectionOf)->map(function($item) use ($model) {
+        $options = Zuora::getZuoraClient()->get($model->getObject(), [], $arguments);
+
+        /*$queryParams = [];
+        if (property_exists($options, 'nextPage')) {
+            $query = parse_url($options->nextPage, PHP_URL_QUERY);
+            parse_str($query, $queryParams);
+        }*/
+
+        $collection = collect($options->$collectionOf)->map(function($item) use ($model) {
             return new $model->collectionOf((array)$item);
         });
-        return $options;
+        $collection->nextPage = $options->nextPage;
+        $collection->arguments = $arguments;
+        return $collection;
     }
 
     public function describe()
