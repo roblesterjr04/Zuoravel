@@ -40,6 +40,13 @@ class Zuora
         return $this->client;
     }
 
+    public function entity($entityId)
+    {
+        $this->client = new ZuoraClient([$entityId]);
+
+        return $this;
+    }
+
     public function paymentScreen($id = null, $tenantId = null, $submit = true)
     {
         $signingVersion = config('zuoravel.hostedPage.signatureMethod');

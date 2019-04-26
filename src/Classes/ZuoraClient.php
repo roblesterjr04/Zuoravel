@@ -14,13 +14,15 @@ class ZuoraClient
     private $client;
     private $cookies = [];
     private $authMethod;
+    private $entities;
 
-    public function __construct()
+    public function __construct($entities = null)
     {
         $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.api.zuora.com';
         $version = config('zuoravel.version');
         $authMethod = 'Lester\\Zuoravel\\Classes\\' . config('zuoravel.authentication');
         $this->authMethod = new $authMethod();
+        $this->entities = $entities ?: config('zuoravel.entities');
 
         $this->client = new Client([
             'base_uri' => "$url/$version/",
@@ -55,7 +57,7 @@ class ZuoraClient
             if (config('zuoravel.authentication') == 'ClientAuth') {
                 $payload['headers'] = [
                     'Authorization' => 'Bearer ' . $storage::get('_zuoravel_token', $this->authenticate())->access_token,
-                    'Zuora-Entity-Ids' => config('zuoravel.entities'),
+                    'Zuora-Entity-Ids' => $this->entities,
                 ];
             }
             $response = $this->client->$method($endpoint, $payload);
