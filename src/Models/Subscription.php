@@ -15,7 +15,7 @@ class Subscription extends RestModel implements Restable
     {
         $response = Zuora::getZuoraClient()->post('subscriptions/preview', $payload);
 
-        return $response;
+        return new self((array)$response);
     }
 
 }

@@ -40,19 +40,6 @@ class Zuora
         return $this->client;
     }
 
-    /*public function catalog($productId = null)
-    {
-        if ($productId)
-            return $this->client->get('catalog/product/' . $productId);
-
-        return $this->client->get('catalog/products');
-    }*/
-
-    public function describe($object)
-    {
-        return $this->client->get('describe/'.$object);
-    }
-
     public function paymentScreen($id = null, $tenantId = null, $submit = true)
     {
         $signingVersion = config('zuoravel.hostedPage.signatureMethod');

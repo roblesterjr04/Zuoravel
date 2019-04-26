@@ -8,8 +8,8 @@ use Lester\Zuoravel\Interfaces\Restable;
 class Account extends RestModel implements Restable
 {
 
-    protected $object = 'object/account';
+    protected $object = 'accounts';
 
-
+    
 
 }
