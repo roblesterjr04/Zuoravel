@@ -32,7 +32,7 @@ abstract class RestModel extends Model
     public static function create(array $options = [])
     {
         $model = new static();
-        return Zuora::getZuoraClient()->post($model->getObject(), $options);
+        return new static((array)Zuora::getZuoraClient()->post($model->getObject(), $options));
     }
 
     public function update(array $attributes = [], array $options = [])
