@@ -6,6 +6,7 @@ class Zuora
 {
 
     private $client;
+    private $entity;
 
     /**
      * Instantiate the library class.
@@ -40,11 +41,15 @@ class Zuora
         return $this->client;
     }
 
-    public function entity($entityId)
+    public function entity($entityId = null)
     {
-        $this->client = new ZuoraClient([$entityId]);
+        if ($entityId) {
+            $this->client = new ZuoraClient([$entityId]);
+            $this->entity = $entityId;
+            return $this;
+        }
 
-        return $this;
+        return $this->client->get('entities/' . $this->entity);
     }
 
     public function paymentScreen($id = null, $tenantId = null, $submit = true)
