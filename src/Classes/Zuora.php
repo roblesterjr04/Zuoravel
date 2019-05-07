@@ -26,7 +26,7 @@ class Zuora
         $restModel = $this->getRestModel($method);
         if ($restModel !== null) {
             if ($restModel->collectionOf) {
-                return $restModel->all(...$arguments);
+                return $restModel;
             }
             if (!count($arguments)) return $restModel;
             return $restModel->get(...$arguments);

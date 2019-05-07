@@ -4,6 +4,7 @@ namespace Lester\Zuoravel\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Lester\Zuoravel\Facades\Zuora;
+use Illuminate\Support\Str;
 
 abstract class RestModel extends Model
 {
@@ -42,7 +43,8 @@ abstract class RestModel extends Model
 
     public static function get($id)
     {
-        $options = Zuora::getZuoraClient()->get((new static())->getObject() . '/' . $id);
+        $model = Str::singular((new static())->getObject());
+        $options = Zuora::getZuoraClient()->get($model . '/' . $id);
         return new static((array)$options);
     }
 
