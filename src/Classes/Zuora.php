@@ -52,15 +52,15 @@ class Zuora
         return $this->client->get('entities/' . $this->entity);
     }
 
-    public function paymentScreen($id = null, $tenantId = null, $submit = true)
+    public function paymentScreen($id = null, $tenantId = null, $submit = true, $parameters = [])
     {
         $signingVersion = config('zuoravel.hostedPage.signatureMethod');
         switch ($signingVersion) {
             case 'v1':
-                return (new PagesIframe($id, $tenantId))->screen();
+                return (new PagesIframe($id, $tenantId))->screen($parameters);
                 break;
             case 'v2':
-                return (new PagesScript($id, $tenantId, $submit))->screen();
+                return (new PagesScript($id, $tenantId, $submit))->screen($parameters);
                 break;
         }
 

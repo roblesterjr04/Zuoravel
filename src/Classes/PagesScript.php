@@ -22,23 +22,31 @@ class PagesScript extends ZuoraHostedPage implements Signable
     {
         $signature = $this->signature();
         $submit = $this->submit ? 'true' : 'false';
+        
+        $defaults = [
+            'tenantId'  => $signature->tenantId,
+            'id'        => $this->pageId(),
+            'token'     => $signature->token,
+            'signature' => $signature->signature,
+            'style'     => 'inline',
+            'key'       => $signature->key,
+            'submitEnabled' => $submit,
+            'locale'    => $this->locale(),
+            'url'       => $this->baseUrl(),
+            'paymentGateway' => $this->paymentGateway(),
+        ];
+
+        $options = array_merge($defaults, $data);
+
+        $optionsJson = json_encode($options);
+
+
         $version = config('zuoravel.hostedPage.scriptVersion', '1.3.1');
         $script = "<script type=\"text/javascript\" src=\"https://static.zuora.com/Resources/libs/hosted/$version/zuora-min.js\"></script>";
         $script .= "<div id=\"zuora_payment\"></div>
         <script>
             var zprepopulateFields = {};
-            var zparams = {
-                tenantId:'{$signature->tenantId}',
-                id:'{$this->pageId()}',
-                token:'{$signature->token}',
-                signature:'{$signature->signature}',
-                style:'inline',
-                key:'{$signature->key}',
-                submitEnabled:'{$submit}',
-                locale:'{$this->locale()}',
-                url:'{$this->baseUrl()}',
-                paymentGateway:'{$this->paymentGateway()}'
-            };
+            var zparams = {$optionsJson};
             var zcallback = function(response) {
                 console.log(response);
                 {$this->callback}(response);
