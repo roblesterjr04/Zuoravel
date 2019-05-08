@@ -12,13 +12,19 @@ class ClientAuth implements Authenticatable
     {
         $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.api.zuora.com';
 
-        $response = $client->post($url . '/oauth/token', [
-            'form_params' => [
-                'client_id' => config('zuoravel.client_id'),
-                'client_secret' => config('zuoravel.client_secret'),
-                'grant_type' => config('zuoravel.grant_type', 'client_credentials')
-            ]
-        ]);
+        try {
+            $response = $client->post($url . '/oauth/token', [
+                'form_params' => [
+                    'client_id' => config('zuoravel.client_id'),
+                    'client_secret' => config('zuoravel.client_secret'),
+                    'grant_type' => config('zuoravel.grant_type', 'client_credentials')
+                ]
+            ]);
+        } catch (ClientException $e) {
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 400) return $this->authenticate($client);
+            throw($e);
+        }
 
         $body = json_decode($response->getBody());
 

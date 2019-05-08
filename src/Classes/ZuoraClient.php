@@ -54,15 +54,21 @@ class ZuoraClient
                 'query' => $query,
             ];
             $storage = $this->tokenStorage();
+            $headers = [
+                'Authorization' => 'Bearer ' . $storage::get('_zuoravel_token', $this->authenticate())->access_token,
+                'Zuora-Entity-Ids' => $this->entities,
+            ];
+            if (config('zuoravel.minor_version')) {
+                $headers['zuora-version'] = config('zuoravel.minor_version');
+            }
             if (config('zuoravel.authentication') == 'ClientAuth') {
-                $payload['headers'] = [
-                    'Authorization' => 'Bearer ' . $storage::get('_zuoravel_token', $this->authenticate())->access_token,
-                    'Zuora-Entity-Ids' => $this->entities,
-                ];
+                $payload['headers'] = $headers;
             }
             $response = $this->client->$method($endpoint, $payload);
         } catch (ClientException $e) {
-            //throw($e);
+            $res = $e->getResponse();
+            //dd($res->getStatusCode());
+            throw($e);
             //sleep(1);
             //$this->authenticate();
             return $this->request($method, $endpoint, $arguments, $query);
