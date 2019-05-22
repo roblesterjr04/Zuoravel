@@ -4,6 +4,7 @@ namespace Lester\Zuoravel\Classes;
 
 use Lester\Zuoravel\Interfaces\Signable;
 use Lester\Zuoravel\Facades\Zuora;
+use Illuminate\Support\Arr;
 
 class PagesScript extends ZuoraHostedPage implements Signable
 {
@@ -22,7 +23,7 @@ class PagesScript extends ZuoraHostedPage implements Signable
     {
         $signature = $this->signature();
         $submit = $this->submit ? 'true' : 'false';
-        
+
         $defaults = [
             'tenantId'  => $signature->tenantId,
             'id'        => $this->pageId(),
@@ -36,16 +37,18 @@ class PagesScript extends ZuoraHostedPage implements Signable
             'paymentGateway' => $this->paymentGateway(),
         ];
 
-        $options = array_merge($defaults, $data);
+        $options = array_merge($defaults, Arr::get($data, 'parameters') ?: []);
+        $prefill = Arr::get($data, 'prepopulateField') ?: [];
 
         $optionsJson = json_encode($options);
+        $prefillJson = json_encode($prefill);
 
 
         $version = config('zuoravel.hostedPage.scriptVersion', '1.3.1');
         $script = "<script type=\"text/javascript\" src=\"https://static.zuora.com/Resources/libs/hosted/$version/zuora-min.js\"></script>";
         $script .= "<div id=\"zuora_payment\"></div>
         <script>
-            var zprepopulateFields = {};
+            var zprepopulateFields = {$prefillJson};
             var zparams = {$optionsJson};
             var zcallback = function(response) {
                 console.log(response);
