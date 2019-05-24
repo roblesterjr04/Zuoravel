@@ -10,15 +10,17 @@ abstract class ZuoraHostedPage
     private $pageId;
     private $tenantId;
     private $pageModel;
+    protected $errorHandler;
     protected $submit;
     protected $callback;
 
-    public function __construct($pageId = null, $tenantId = null, $submit = true, $callback = 'zuoraCallback')
+    public function __construct($pageId = null, $tenantId = null, $submit = true, $callback = 'zuoraCallback', $errorHandler = 'zuoraErrorHandler')
     {
         $this->pageId = $pageId;
         $this->tenantId = $tenantId;
         $this->submit = $submit;
         $this->callback = $callback;
+        $this->errorHandler = $errorHandler;
     }
 
 

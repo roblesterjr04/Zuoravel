@@ -50,14 +50,19 @@ class PagesScript extends ZuoraHostedPage implements Signable
         <script>
             var zprepopulateFields = {$prefillJson};
             var zparams = {$optionsJson};
+            var zerrorHandler = function(key, code, message) {
+                console.log(key, code, message);
+                {$this->errorHandler}(key, message);
+            };
             var zcallback = function(response) {
                 console.log(response);
                 {$this->callback}(response);
             };
-            Z.render(
+            Z.renderWithErrorHandler(
                 zparams,
                 zprepopulateFields,
-                zcallback
+                zcallback,
+                zerrorHandler
             );
         </script>";
         return $script;
