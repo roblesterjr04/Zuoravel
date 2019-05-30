@@ -48,22 +48,24 @@ class PagesScript extends ZuoraHostedPage implements Signable
         $script = "<script type=\"text/javascript\" src=\"https://static.zuora.com/Resources/libs/hosted/$version/zuora-min.js\"></script>";
         $script .= "<div id=\"zuora_payment\"></div>
         <script>
-            var zprepopulateFields = {$prefillJson};
-            var zparams = {$optionsJson};
-            var zerrorHandler = function(key, code, message) {
-                console.log(key, code, message);
-                {$this->errorHandler}(key, message);
-            };
-            var zcallback = function(response) {
-                console.log(response);
-                {$this->callback}(response);
-            };
-            Z.renderWithErrorHandler(
-                zparams,
-                zprepopulateFields,
-                zcallback,
-                zerrorHandler
-            );
+            (function zuoraRenderPage() {
+                var zprepopulateFields = {$prefillJson};
+                var zparams = {$optionsJson};
+                var zerrorHandler = function(key, code, message) {
+                    console.log(key, code, message);
+                    {$this->errorHandler}(key, message);
+                };
+                var zcallback = function(response) {
+                    console.log(response);
+                    {$this->callback}(response);
+                };
+                Z.renderWithErrorHandler(
+                    zparams,
+                    zprepopulateFields,
+                    zcallback,
+                    zerrorHandler
+                );
+            })();
         </script>";
         return $script;
     }
