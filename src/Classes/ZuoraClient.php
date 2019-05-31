@@ -18,7 +18,7 @@ class ZuoraClient
 
     public function __construct($entities = null)
     {
-        $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.api.zuora.com';
+        $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.zuora.com';
         $version = config('zuoravel.version');
         $authMethod = 'Lester\\Zuoravel\\Classes\\' . config('zuoravel.authentication');
         $this->authMethod = new $authMethod();
