@@ -10,7 +10,7 @@ class ClientAuth implements Authenticatable
 {
     public function authenticate(Client $client)
     {
-        $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.api.zuora.com';
+        $url = config('zuoravel.debug') ? 'https://rest.apisandbox.zuora.com' : 'https://rest.zuora.com';
 
         try {
             $response = $client->post($url . '/oauth/token', [
