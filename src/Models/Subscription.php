@@ -13,6 +13,10 @@ class Subscription extends RestModel implements Restable
 
     protected $object = 'subscriptions';
 
+    protected $appends = [
+        'invoice',
+    ];
+
     public function preview($payload = [])
     {
         $response = Zuora::getZuoraClient()->post('subscriptions/preview', $payload);
@@ -22,7 +26,7 @@ class Subscription extends RestModel implements Restable
 
     public function getInvoiceAttribute()
     {
-        return new Invoice(Arr::get($this->attributes, 'invoice'));
+        return new Invoice((array)Arr::get($this->attributes, 'invoice'));
     }
 
 }
