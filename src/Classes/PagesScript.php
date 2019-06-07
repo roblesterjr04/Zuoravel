@@ -34,7 +34,7 @@ class PagesScript extends ZuoraHostedPage implements Signable
             'submitEnabled' => $submit,
             'locale'    => $this->locale(),
             'url'       => $this->baseUrl(),
-            'paymentGateway' => $this->paymentGateway(),
+            'paymentGateway' => Arr::get($data, 'paymentGateway') ?: $this->paymentGateway(),
         ];
 
         $options = array_merge($defaults, Arr::get($data, 'parameters') ?: []);
